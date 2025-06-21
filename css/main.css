@@ -1170,3 +1170,43 @@ body {
     overflow: hidden;
 }
 
+
+/* Refresh Button */
+.refresh-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    width: 35px;
+    height: 35px;
+    background: rgba(0, 255, 127, 0.1);
+    border: 1px solid var(--brand-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(10px);
+}
+
+.refresh-btn:hover {
+    background: rgba(0, 255, 127, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0, 255, 127, 0.4);
+}
+
+.refresh-btn i {
+    color: var(--brand-primary);
+    font-size: 14px;
+    transition: transform var(--transition-fast);
+}
+
+.refresh-btn:hover i {
+    transform: rotate(180deg);
+}
+
+.refresh-btn:active {
+    transform: scale(0.95);
+}
+
