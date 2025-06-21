@@ -613,22 +613,21 @@ async function checkPassword() {
         return;
     }
     
-    // Show loading state
-    const button = document.querySelector('.access-btn');
-    const originalText = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
-    button.disabled = true;
-    
     try {
-        // Log access attempt
-        await logAccessAttempt(password, 'main');
-        
         if (secretLinks[password]) {
-            // Pass the encoded URL directly to openSecretContent
             const encodedUrl = secretLinks[password];
             if (encodedUrl) {
-                showSuccess('Verification successful! Redirecting...');
-                await FirebaseHelper.updateStatistics('successfulAccess');
+                showNotification('Verification successful! Redirecting...', 'success');
+                
+                // Log access attempt (don't await to avoid blocking)
+                logAccessAttempt(password, 'main').catch(err => 
+                    console.error('Logging failed:', err)
+                );
+                
+                // Update statistics (don't await to avoid blocking)
+                FirebaseHelper.updateStatistics('successfulAccess').catch(err => 
+                    console.error('Statistics update failed:', err)
+                );
                 
                 setTimeout(() => {
                     openSecretContent(encodedUrl);
@@ -638,18 +637,23 @@ async function checkPassword() {
         }
         
         // Invalid password
-        await FirebaseHelper.updateStatistics('failedAccess');
         showError('Invalid access code!');
         Utils.addAnimation(passwordInput, 'shake');
         passwordInput.value = '';
         
+        // Log failed attempt (don't await to avoid blocking)
+        logAccessAttempt(password, 'main').catch(err => 
+            console.error('Logging failed:', err)
+        );
+        
+        // Update statistics (don't await to avoid blocking)
+        FirebaseHelper.updateStatistics('failedAccess').catch(err => 
+            console.error('Statistics update failed:', err)
+        );
+        
     } catch (error) {
         console.error('Error checking password:', error);
         showError('Error verifying access code');
-    } finally {
-        // Restore button state
-        button.innerHTML = originalText;
-        button.disabled = false;
     }
 }
 
@@ -666,15 +670,21 @@ async function checkGamePassword() {
     }
     
     try {
-        // Log access attempt
-        await logAccessAttempt(password, 'game', gameTitle);
-        
         // First check in gameLinks for the specific game version
         if (gameLinks[gameTitle] && gameLinks[gameTitle][password]) {
             const encodedUrl = gameLinks[gameTitle][password];
             if (encodedUrl) {
                 showNotification('Verification successful! Redirecting...', 'success');
-                await FirebaseHelper.updateStatistics('successfulAccess');
+                
+                // Log access attempt (don't await to avoid blocking)
+                logAccessAttempt(password, 'game', gameTitle).catch(err => 
+                    console.error('Logging failed:', err)
+                );
+                
+                // Update statistics (don't await to avoid blocking)
+                FirebaseHelper.updateStatistics('successfulAccess').catch(err => 
+                    console.error('Statistics update failed:', err)
+                );
                 
                 setTimeout(() => {
                     openSecretContent(encodedUrl);
@@ -689,7 +699,16 @@ async function checkGamePassword() {
             const encodedUrl = secretLinks[password];
             if (encodedUrl) {
                 showNotification('Verification successful! Redirecting...', 'success');
-                await FirebaseHelper.updateStatistics('successfulAccess');
+                
+                // Log access attempt (don't await to avoid blocking)
+                logAccessAttempt(password, 'game', gameTitle).catch(err => 
+                    console.error('Logging failed:', err)
+                );
+                
+                // Update statistics (don't await to avoid blocking)
+                FirebaseHelper.updateStatistics('successfulAccess').catch(err => 
+                    console.error('Statistics update failed:', err)
+                );
                 
                 setTimeout(() => {
                     openSecretContent(encodedUrl);
@@ -700,10 +719,19 @@ async function checkGamePassword() {
         }
         
         // Invalid password
-        await FirebaseHelper.updateStatistics('failedAccess');
         showGameError('Invalid access code!');
         Utils.addAnimation(gameIdInput, 'shake');
         gameIdInput.value = '';
+        
+        // Log failed attempt (don't await to avoid blocking)
+        logAccessAttempt(password, 'game', gameTitle).catch(err => 
+            console.error('Logging failed:', err)
+        );
+        
+        // Update statistics (don't await to avoid blocking)
+        FirebaseHelper.updateStatistics('failedAccess').catch(err => 
+            console.error('Statistics update failed:', err)
+        );
         
     } catch (error) {
         console.error('Error checking game password:', error);
@@ -717,20 +745,29 @@ async function logAccessAttempt(password, type, gameTitle = null) {
         const ip = await Utils.getUserIP();
         const sessionId = Utils.getStorageItem('sessionId');
         
+        // Check if password exists in gameLinks for the specific game version
+        let success = false;
+        if (gameTitle && gameLinks[gameTitle] && gameLinks[gameTitle][password]) {
+            success = true;
+        } else if (secretLinks[password]) {
+            success = true;
+        }
+        
         const logData = {
             ip: ip,
             sessionId: sessionId,
             password: password.substring(0, 3) + '***', // Partial password for security
             type: type,
             gameTitle: gameTitle,
-            success: secretLinks[password] ? true : false,
+            success: success,
             userAgent: navigator.userAgent,
             timestamp: new Date()
         };
         
         await FirebaseHelper.logAccess(logData);
     } catch (error) {
-        console.error('Error logging access attempt:', error);
+        console.error('Error logging access:', error);
+        // Don't show error to user for logging failures
     }
 }
 
