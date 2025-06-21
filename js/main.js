@@ -624,13 +624,14 @@ async function checkPassword() {
         await logAccessAttempt(password, 'main');
         
         if (secretLinks[password]) {
-            const decodedUrl = Utils.base64Decode(secretLinks[password]);
-            if (decodedUrl) {
+            // Pass the encoded URL directly to openSecretContent
+            const encodedUrl = secretLinks[password];
+            if (encodedUrl) {
                 showSuccess('Verification successful! Redirecting...');
                 await FirebaseHelper.updateStatistics('successfulAccess');
                 
                 setTimeout(() => {
-                    openSecretContent(decodedUrl);
+                    openSecretContent(encodedUrl);
                 }, 1500);
                 return;
             }
@@ -669,13 +670,14 @@ async function checkGamePassword() {
         await logAccessAttempt(password, 'game', gameTitle);
         
         if (secretLinks[password]) {
-            const decodedUrl = Utils.base64Decode(secretLinks[password]);
-            if (decodedUrl) {
+            // Pass the encoded URL directly to openSecretContent
+            const encodedUrl = secretLinks[password];
+            if (encodedUrl) {
                 showNotification('Verification successful! Redirecting...', 'success');
                 await FirebaseHelper.updateStatistics('successfulAccess');
                 
                 setTimeout(() => {
-                    openSecretContent(decodedUrl);
+                    openSecretContent(encodedUrl);
                     closeGameIdPage();
                 }, 1500);
                 return;
@@ -718,23 +720,43 @@ async function logAccessAttempt(password, type, gameTitle = null) {
 }
 
 // Open secret content
-function openSecretContent(url) {
+function openSecretContent(encodedUrl) {
     const contentFrame = document.getElementById('contentFrame');
     const backBtn = document.getElementById('backBtn');
     
     if (contentFrame && backBtn) {
-        contentFrame.src = url;
-        contentFrame.classList.add('visible');
-        backBtn.classList.add('visible');
-        
-        // Hide main container
-        const mainContainer = document.getElementById('mainContainer');
-        if (mainContainer) {
-            mainContainer.style.display = 'none';
+        try {
+            // Decode the URL only when needed and handle errors securely
+            const decodedUrl = Utils.base64Decode(encodedUrl);
+            if (!decodedUrl) {
+                throw new Error('Invalid URL format');
+            }
+            
+            contentFrame.src = decodedUrl;
+            contentFrame.classList.add('visible');
+            backBtn.classList.add('visible');
+            
+            // Hide main container
+            const mainContainer = document.getElementById('mainContainer');
+            if (mainContainer) {
+                mainContainer.style.display = 'none';
+            }
+            
+            // Disable body scroll
+            document.body.classList.add('no-scroll');
+            
+            // Add error handler for iframe loading
+            contentFrame.onerror = function() {
+                console.error('Error loading content');
+                showError('Failed to load content. Please check your internet connection.');
+                goBack(); // Return to main page on error
+            };
+            
+        } catch (error) {
+            console.error('Error opening content:', error);
+            showError('Failed to load content. Please try again.');
+            // Don't expose the URL in error messages
         }
-        
-        // Disable body scroll
-        document.body.classList.add('no-scroll');
     }
 }
 
