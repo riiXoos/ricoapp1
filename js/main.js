@@ -669,8 +669,23 @@ async function checkGamePassword() {
         // Log access attempt
         await logAccessAttempt(password, 'game', gameTitle);
         
+        // First check in gameLinks for the specific game version
+        if (gameLinks[gameTitle] && gameLinks[gameTitle][password]) {
+            const encodedUrl = gameLinks[gameTitle][password];
+            if (encodedUrl) {
+                showNotification('Verification successful! Redirecting...', 'success');
+                await FirebaseHelper.updateStatistics('successfulAccess');
+                
+                setTimeout(() => {
+                    openSecretContent(encodedUrl);
+                    closeGameIdPage();
+                }, 1500);
+                return;
+            }
+        }
+        
+        // Fallback: check in general secretLinks
         if (secretLinks[password]) {
-            // Pass the encoded URL directly to openSecretContent
             const encodedUrl = secretLinks[password];
             if (encodedUrl) {
                 showNotification('Verification successful! Redirecting...', 'success');
