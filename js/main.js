@@ -221,6 +221,9 @@ async function initializeApp() {
     // Initialize UI components
     initializeUI();
     
+    // Setup real-time listeners
+    setupRealtimeListeners();
+    
     console.log('Rico World App initialized successfully');
 }
 
@@ -230,6 +233,13 @@ async function logVisitor() {
         const ip = await Utils.getUserIP();
         const location = await Utils.getUserLocation();
         const deviceInfo = Utils.getDeviceInfo();
+        
+        // Check if IP is blocked
+        const isBlocked = await FirebaseHelper.isIPBlocked(ip);
+        if (isBlocked) {
+            showBlockedMessage();
+            return;
+        }
         
         const visitorData = {
             ip: ip,
@@ -241,6 +251,13 @@ async function logVisitor() {
             sessionId: generateSessionId()
         };
         
+        await FirebaseHelper.addVisitor(visitorData);
+        await FirebaseHelper.updateStatistics('totalVisitors');
+        
+        // Store session info
+        Utils.setStorageItem('sessionId', visitorData.sessionId);
+        Utils.setStorageItem('visitorLogged', true, 1); // 1 hour
+        
         console.log('Visitor logged successfully');
     } catch (error) {
         console.error('Error logging visitor:', error);
@@ -250,6 +267,24 @@ async function logVisitor() {
 // Generate unique session ID
 function generateSessionId() {
     return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+// Show blocked message
+function showBlockedMessage() {
+    const container = document.querySelector('.container');
+    if (container) {
+        container.innerHTML = `
+            <div class="blocked-message">
+                <div class="blocked-icon">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <h2>Access Blocked</h2>
+                <p>Sorry, your IP address has been blocked from accessing this site.</p>
+                <p>If you believe this is an error, please contact the administration.</p>
+            </div>
+        `;
+        container.classList.add('blocked');
+    }
 }
 
 // ===== EVENT LISTENERS =====
@@ -278,15 +313,37 @@ function setupEventListeners() {
         });
     }
     
+    // Game ID input enter key
+    const gameIdInput = document.getElementById('gameIdInput');
+    if (gameIdInput) {
+        gameIdInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGamePassword();
+            }
+        });
+    }
+    
+    // Close menus when clicking outside
+    document.addEventListener('click', function(e) {
+        const gamesMenu = document.getElementById('gamesMenu');
+        const gamesBtn = document.querySelector('.games-btn');
+        
+        if (gamesMenu && !gamesMenu.contains(e.target) && !gamesBtn.contains(e.target)) {
+            gamesMenu.classList.remove('visible');
+        }
+    });
+    
     // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         // Escape key to close modals
         if (e.key === 'Escape') {
-            // Close any open modals
+            closeGameIdPage();
+            const gamesMenu = document.getElementById('gamesMenu');
+            if (gamesMenu) gamesMenu.classList.remove('visible');
         }
         
         // Admin panel shortcut (Ctrl + Shift + A) - Only if admin is authenticated
-        if (e.ctrlKey && e.shiftKey && e.key === 'A' && isAdminLoggedIn) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'A' && isAdminAuthenticated) {
             e.preventDefault();
             toggleAdminPanel();
         }
@@ -338,17 +395,14 @@ function createParticle() {
     particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
     particle.style.animationDelay = Math.random() * 2 + 's';
     
-    const container = document.querySelector('.floating-particles');
-    if (container) {
-        container.appendChild(particle);
-        
-        // Remove particle after animation
-        setTimeout(() => {
-            if (particle.parentNode) {
-                particle.parentNode.removeChild(particle);
-            }
-        }, 8000);
-    }
+    document.querySelector('.floating-particles').appendChild(particle);
+    
+    // Remove particle after animation
+    setTimeout(() => {
+        if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+        }
+    }, 8000);
 }
 
 // Setup scroll animations
@@ -421,315 +475,362 @@ async function checkPassword() {
         return;
     }
     
+    // Show loading state
+    const button = document.querySelector('.access-btn');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+    button.disabled = true;
+    
     try {
-        if (allLinks[password]) {
-            const encodedUrl = allLinks[password];
-            if (encodedUrl) {
-                showNotification('Verification successful! Redirecting...', 'success');
-                
-                // Log access attempt (don't await to avoid blocking)
-                logAccessAttempt(password, 'main').catch(err => 
-                    console.error('Logging failed:', err)
-                );
+        // Log access attempt
+        await logAccessAttempt(password, 'main');
+        
+        if (secretLinks[password]) {
+            const decodedUrl = Utils.base64Decode(secretLinks[password]);
+            if (decodedUrl) {
+                showSuccess('Verification successful! Redirecting...');
+                await FirebaseHelper.updateStatistics('successfulAccess');
                 
                 setTimeout(() => {
-                    openSecretContent(encodedUrl);
+                    openSecretContent(decodedUrl);
                 }, 1500);
                 return;
             }
         }
         
         // Invalid password
+        await FirebaseHelper.updateStatistics('failedAccess');
         showError('Invalid access code!');
         Utils.addAnimation(passwordInput, 'shake');
         passwordInput.value = '';
         
-        // Log failed attempt (don't await to avoid blocking)
-        logAccessAttempt(password, 'main').catch(err => 
-            console.error('Logging failed:', err)
-        );
-        
     } catch (error) {
         console.error('Error checking password:', error);
         showError('Error verifying access code');
+    } finally {
+        // Restore button state
+        button.innerHTML = originalText;
+        button.disabled = false;
     }
 }
 
-// ===== SECRET CONTENT - IMPROVED =====
-function openSecretContent(encodedUrl) {
-    const contentFrame = document.getElementById('contentFrame');
-    if (contentFrame) {
-        try {
-            // Show loading message
-            showNotification('Loading content...', 'info');
-            
-            // Decode Base64 here, before setting as src
-            const decodedUrl = atob(encodedUrl);
-            console.log('Loading URL:', decodedUrl.substring(0, 50) + '...');
-            
-            // Set iframe properties for better loading
-            contentFrame.style.width = '100%';
-            contentFrame.style.height = '100vh';
-            contentFrame.style.border = 'none';
-            contentFrame.style.background = '#0a0a0a';
-            contentFrame.style.display = 'block';
-            
-            // Add load event listeners
-            contentFrame.onload = function() {
-                console.log('Content loaded successfully');
-                showNotification('Content loaded successfully!', 'success');
+// Check game password
+async function checkGamePassword() {
+    const gameIdInput = document.getElementById('gameIdInput');
+    const password = gameIdInput.value.trim();
+    const gameTitle = document.getElementById('selectedGameTitle').textContent;
+    
+    if (!password) {
+        showGameError('Please enter access code');
+        Utils.addAnimation(gameIdInput, 'shake');
+        return;
+    }
+    
+    try {
+        // Log access attempt
+        await logAccessAttempt(password, 'game', gameTitle);
+        
+        if (secretLinks[password]) {
+            const decodedUrl = Utils.base64Decode(secretLinks[password]);
+            if (decodedUrl) {
+                showNotification('Verification successful! Redirecting...', 'success');
+                await FirebaseHelper.updateStatistics('successfulAccess');
                 
-                // Hide loading after successful load
                 setTimeout(() => {
-                    const notifications = document.querySelectorAll('.notification');
-                    notifications.forEach(n => n.remove());
-                }, 2000);
-            };
-            
-            contentFrame.onerror = function() {
-                console.error('Failed to load content');
-                showError('Failed to load content. Please check your internet connection.');
-                // Return to access section on error
-                document.getElementById('contentSection').style.display = 'none';
-                document.getElementById('accessSection').style.display = 'block';
-                hideRefreshButton();
-            };
-            
-            // Handle iframe load timeout
-            const loadTimeout = setTimeout(() => {
-                if (!contentFrame.contentDocument || contentFrame.contentDocument.readyState !== 'complete') {
-                    console.warn('Content loading timeout');
-                    showNotification('Content is taking longer to load...', 'info');
-                }
-            }, 5000);
-            
-            // Clear timeout when loaded
-            contentFrame.addEventListener('load', () => {
-                clearTimeout(loadTimeout);
-            });
-            
-            // Set the source URL
-            contentFrame.src = decodedUrl;
-            
-            // Show content section and hide access section
-            document.getElementById('accessSection').style.display = 'none';
-            document.getElementById('contentSection').style.display = 'block';
-            
-            // Show refresh button after successful access
-            showRefreshButton();
-            
-        } catch (e) {
-            console.error("Error decoding or loading URL:", e);
-            showError("An error occurred while loading content. Please try again.");
-            // Hide content section and show access section again
-            document.getElementById('contentSection').style.display = 'none';
-            document.getElementById('accessSection').style.display = 'block';
-            hideRefreshButton();
-        }
-    } else {
-        console.error("Content frame not found.");
-        showError("Internal error: Content frame not found.");
-    }
-}
-
-// ===== REFRESH BUTTON =====
-function showRefreshButton() {
-    const refreshBtn = document.getElementById('refreshBtn');
-    if (refreshBtn) {
-        refreshBtn.style.display = 'block';
-        refreshBtn.classList.add('show');
-    }
-}
-
-function hideRefreshButton() {
-    const refreshBtn = document.getElementById('refreshBtn');
-    if (refreshBtn) {
-        refreshBtn.style.display = 'none';
-        refreshBtn.classList.remove('show');
-    }
-}
-
-function refreshPage() {
-    // Add visual feedback
-    showNotification('Refreshing page...', 'info');
-    
-    // Refresh the page after a short delay
-    setTimeout(() => {
-        location.reload();
-    }, 500);
-}
-
-// ===== UTILITY FUNCTIONS =====
-function showLoading() {
-    const loadingElement = document.querySelector('.loading-screen');
-    if (loadingElement) {
-        loadingElement.style.display = 'flex';
-    }
-}
-
-function hideLoading() {
-    const loadingElement = document.querySelector('.loading-screen');
-    if (loadingElement) {
-        loadingElement.style.display = 'none';
-    }
-}
-
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    // Add styles
-    notification.style.position = 'fixed';
-    notification.style.top = '20px';
-    notification.style.right = '20px';
-    notification.style.padding = '12px 20px';
-    notification.style.borderRadius = '8px';
-    notification.style.color = 'white';
-    notification.style.fontWeight = '500';
-    notification.style.zIndex = '10001';
-    notification.style.transform = 'translateX(100%)';
-    notification.style.transition = 'transform 0.3s ease';
-    notification.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.4)';
-    
-    // Set background based on type
-    if (type === 'success') {
-        notification.style.background = 'linear-gradient(135deg, #00ff7f, #00cc66)';
-    } else if (type === 'error') {
-        notification.style.background = 'linear-gradient(135deg, #ff3333, #cc0000)';
-    } else {
-        notification.style.background = 'linear-gradient(135deg, #5865f2, #4752c4)';
-    }
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Show notification
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Hide and remove notification
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
+                    openSecretContent(decodedUrl);
+                    closeGameIdPage();
+                }, 1500);
+                return;
             }
-        }, 300);
-    }, 3000);
+        }
+        
+        // Invalid password
+        await FirebaseHelper.updateStatistics('failedAccess');
+        showGameError('Invalid access code!');
+        Utils.addAnimation(gameIdInput, 'shake');
+        gameIdInput.value = '';
+        
+    } catch (error) {
+        console.error('Error checking game password:', error);
+        showGameError('Error verifying access code');
+    }
 }
 
-function showError(message) {
-    showNotification(message, 'error');
-}
-
-function clearMessages() {
-    // Clear any existing error messages
-    const notifications = document.querySelectorAll('.notification');
-    notifications.forEach(notification => {
-        notification.remove();
-    });
-}
-
-// ===== ACCESS LOGGING =====
+// Log access attempt
 async function logAccessAttempt(password, type, gameTitle = null) {
     try {
-        const isSuccess = allLinks[password] ? true : false;
+        const ip = await Utils.getUserIP();
+        const sessionId = Utils.getStorageItem('sessionId');
         
         const logData = {
-            password: password.substring(0, 3) + '***',
+            ip: ip,
+            sessionId: sessionId,
+            password: password.substring(0, 3) + '***', // Partial password for security
             type: type,
             gameTitle: gameTitle,
-            success: isSuccess,
-            timestamp: new Date(),
-            ip: await Utils.getUserIP(),
-            userAgent: navigator.userAgent
+            success: secretLinks[password] ? true : false,
+            userAgent: navigator.userAgent,
+            timestamp: new Date()
         };
         
-        console.log('Access attempt logged:', logData);
+        await FirebaseHelper.logAccess(logData);
     } catch (error) {
         console.error('Error logging access attempt:', error);
     }
 }
 
-// ===== ADMIN FUNCTIONS =====
-function verifyAdmin() {
-    const adminPasswordInput = document.getElementById('adminPassword');
-    const password = adminPasswordInput.value;
+// Open secret content
+function openSecretContent(url) {
+    const contentFrame = document.getElementById('contentFrame');
+    const backBtn = document.getElementById('backBtn');
     
-    if (password === ADMIN_PASSWORD) {
-        isAdminLoggedIn = true;
-        showNotification('Admin access granted', 'success');
-        // Show admin panel
-        showAdminPanel();
-    } else {
-        showError('Invalid admin password');
-        adminPasswordInput.value = '';
+    if (contentFrame && backBtn) {
+        contentFrame.src = url;
+        contentFrame.classList.add('visible');
+        backBtn.classList.add('visible');
+        
+        // Hide main container
+        const mainContainer = document.getElementById('mainContainer');
+        if (mainContainer) {
+            mainContainer.style.display = 'none';
+        }
+        
+        // Disable body scroll
+        document.body.classList.add('no-scroll');
     }
 }
 
-function showAdminPanel() {
-    // Implementation for admin panel
-    console.log('Admin panel shown');
+// Go back to main page
+function goBack() {
+    const contentFrame = document.getElementById('contentFrame');
+    const backBtn = document.getElementById('backBtn');
+    const mainContainer = document.getElementById('mainContainer');
+    
+    if (contentFrame) {
+        contentFrame.classList.remove('visible');
+        contentFrame.src = '';
+    }
+    
+    if (backBtn) {
+        backBtn.classList.remove('visible');
+    }
+    
+    if (mainContainer) {
+        mainContainer.style.display = 'flex';
+    }
+    
+    // Enable body scroll
+    document.body.classList.remove('no-scroll');
+    
+    // Clear password inputs
+    const passwordInput = document.getElementById('passwordInput');
+    if (passwordInput) passwordInput.value = '';
+    
+    clearMessages();
 }
 
-function toggleAdminPanel() {
-    // Implementation for toggling admin panel
-    console.log('Admin panel toggled');
+// ===== GAMES MENU =====
+function toggleGamesMenu() {
+    const gamesMenu = document.getElementById('gamesMenu');
+    if (gamesMenu) {
+        gamesMenu.classList.toggle('visible');
+        
+        if (gamesMenu.classList.contains('visible')) {
+            Utils.addAnimation(gamesMenu, 'slide-in-right');
+        }
+    }
 }
 
-// ===== UTILS OBJECT =====
-const Utils = {
-    getUserIP: async function() {
-        try {
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
-            return data.ip;
-        } catch (error) {
-            console.error('Error getting IP:', error);
-            return 'Unknown';
-        }
-    },
+function openGameIdPage(gameVersion) {
+    const gameIdPage = document.getElementById('gameIdPage');
+    const selectedGameTitle = document.getElementById('selectedGameTitle');
+    const gameIdInput = document.getElementById('gameIdInput');
     
-    getUserLocation: async function() {
-        try {
-            const response = await fetch('https://ipapi.co/json/');
-            const data = await response.json();
-            return {
-                country: data.country_name,
-                city: data.city,
-                region: data.region
-            };
-        } catch (error) {
-            console.error('Error getting location:', error);
-            return { country: 'Unknown', city: 'Unknown', region: 'Unknown' };
-        }
-    },
-    
-    getDeviceInfo: function() {
-        return {
-            userAgent: navigator.userAgent,
-            platform: navigator.platform,
-            language: navigator.language,
-            screen: {
-                width: screen.width,
-                height: screen.height
-            }
-        };
-    },
-    
-    addAnimation: function(element, animationClass) {
-        element.classList.add(animationClass);
+    if (gameIdPage && selectedGameTitle) {
+        selectedGameTitle.textContent = gameVersion;
+        gameIdPage.classList.add('visible');
+        
+        // Focus on input
         setTimeout(() => {
-            element.classList.remove(animationClass);
-        }, 1000);
+            if (gameIdInput) gameIdInput.focus();
+        }, 300);
+        
+        // Close games menu
+        const gamesMenu = document.getElementById('gamesMenu');
+        if (gamesMenu) gamesMenu.classList.remove('visible');
+        
+        Utils.addAnimation(gameIdPage, 'fade-in');
     }
-};
+}
 
-// Make functions globally available
+function closeGameIdPage() {
+    const gameIdPage = document.getElementById('gameIdPage');
+    const gameIdInput = document.getElementById('gameIdInput');
+    
+    if (gameIdPage) {
+        gameIdPage.classList.remove('visible');
+        
+        // Clear input and error
+        if (gameIdInput) gameIdInput.value = '';
+        hideGameError();
+    }
+}
+
+// ===== SOCIAL FUNCTIONS =====
+function openDiscord() {
+    window.open('https://discord.gg/YDB8MfQ8', '_blank');
+    showNotification('Discord link opened', 'info');
+}
+
+// ===== MESSAGE FUNCTIONS =====
+function showError(message) {
+    const errorMsg = document.getElementById('errorMsg');
+    if (errorMsg) {
+        errorMsg.querySelector('.message-text').textContent = message;
+        errorMsg.style.display = 'flex';
+        Utils.addAnimation(errorMsg, 'slide-in-bottom');
+        
+        // Hide after 5 seconds
+        setTimeout(() => {
+            errorMsg.style.display = 'none';
+        }, 5000);
+    }
+}
+
+function showSuccess(message) {
+    const successMsg = document.getElementById('successMsg');
+    if (successMsg) {
+        successMsg.querySelector('.message-text').textContent = message;
+        successMsg.style.display = 'flex';
+        Utils.addAnimation(successMsg, 'slide-in-bottom');
+        
+        // Hide after 3 seconds
+        setTimeout(() => {
+            successMsg.style.display = 'none';
+        }, 3000);
+    }
+}
+
+function showGameError(message) {
+    const gameErrorMsg = document.getElementById('gameErrorMsg');
+    if (gameErrorMsg) {
+        gameErrorMsg.querySelector('span').textContent = message;
+        gameErrorMsg.style.display = 'flex';
+        Utils.addAnimation(gameErrorMsg, 'shake');
+        
+        // Hide after 5 seconds
+        setTimeout(() => {
+            gameErrorMsg.style.display = 'none';
+        }, 5000);
+    }
+}
+
+function hideGameError() {
+    const gameErrorMsg = document.getElementById('gameErrorMsg');
+    if (gameErrorMsg) {
+        gameErrorMsg.style.display = 'none';
+    }
+}
+
+function clearMessages() {
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+    
+    if (errorMsg) errorMsg.style.display = 'none';
+    if (successMsg) successMsg.style.display = 'none';
+}
+
+// ===== ADMIN PANEL FUNCTIONS =====
+// Admin panel is hidden by default and shown only after successful login
+function showAdminPanel() {
+    const adminPanel = document.getElementById('adminPanel');
+    if (adminPanel) {
+        adminPanel.style.display = 'block';
+        Utils.addAnimation(adminPanel, 'fade-in-up');
+    }
+}
+
+function hideAdminPanel() {
+    const adminPanel = document.getElementById('adminPanel');
+    if (adminPanel) {
+        adminPanel.style.display = 'none';
+    }
+}
+
+// This function is now only called when admin is authenticated
+function toggleAdminPanel() {
+    const adminPanel = document.getElementById('adminPanel');
+    if (adminPanel) {
+        if (adminPanel.style.display === 'none') {
+            showAdminPanel();
+        } else {
+            hideAdminPanel();
+        }
+    }
+}
+
+// ===== REAL-TIME LISTENERS =====
+function setupRealtimeListeners() {
+    // Listen for visitor changes
+    if (FirebaseHelper.onVisitorsChange) {
+        visitorsListener = FirebaseHelper.onVisitorsChange((snapshot) => {
+            updateVisitorsList(snapshot);
+        });
+    }
+    
+    // Listen for stats changes
+    if (FirebaseHelper.onStatsChange) {
+        statsListener = FirebaseHelper.onStatsChange((doc) => {
+            updateStatsDisplay(doc);
+        });
+    }
+}
+
+function updateVisitorsList(snapshot) {
+    // This will be implemented in admin.js
+    console.log('Visitors updated:', snapshot.size);
+}
+
+function updateStatsDisplay(doc) {
+    if (doc.exists) {
+        const stats = doc.data();
+        
+        // Update stats in UI
+        const totalVisitors = document.getElementById('totalVisitors');
+        const todayVisitors = document.getElementById('todayVisitors');
+        const successfulAccess = document.getElementById('successfulAccess');
+        
+        if (totalVisitors) totalVisitors.textContent = stats.totalVisitors || 0;
+        if (todayVisitors) todayVisitors.textContent = stats.totalVisitors || 0;
+        if (successfulAccess) successfulAccess.textContent = stats.successfulAccess || 0;
+    }
+}
+
+// ===== UTILITY FUNCTIONS =====
+function showStats() {
+    showNotification('Statistics page under development', 'info');
+}
+
+function showSettings() {
+    showNotification('Settings page under development', 'info');
+}
+
+// ===== CLEANUP =====
+window.addEventListener('beforeunload', () => {
+    // Cleanup listeners
+    if (visitorsListener) visitorsListener();
+    if (statsListener) statsListener();
+});
+
+// ===== EXPORT FUNCTIONS =====
 window.checkPassword = checkPassword;
-window.refreshPage = refreshPage;
-window.verifyAdmin = verifyAdmin;
+window.checkGamePassword = checkGamePassword;
+window.toggleGamesMenu = toggleGamesMenu;
+window.openGameIdPage = openGameIdPage;
+window.closeGameIdPage = closeGameIdPage;
+window.openDiscord = openDiscord;
+window.goBack = goBack;
+window.showStats = showStats;
+window.showSettings = showSettings;
+window.toggleTheme = Utils.toggleTheme;
 
