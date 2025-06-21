@@ -1,5 +1,3 @@
-// Main JavaScript file for Rico World App - Simplified Version
-
 // ===== GLOBAL VARIABLES =====
 let currentUser = null;
 let isAdminLoggedIn = false;
@@ -9,9 +7,9 @@ let statsListener = null;
 // Admin password
 const ADMIN_PASSWORD = "rico011899009";
 
-// All Links - Combined from secretLinks and gameLinks
+// All Links - ضع جميع الروابط هنا
 const allLinks = {
-    // Secret Links (Original)
+   // Secret Links (Original)
     "ensasafayed2!": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV92biZodGdzZXJ2ZXI9bG9naW4teHluLXRlc3QyLmhrY3hzZC5jb20mcmFuPTAuNjM5NDcwMjc5NjA0OTczNSZvcGVuSWQ9YTEw",    //testXteq
             "010045!": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hYWExJiY=",    //dadyXftgt
             "s40013543!": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjY5NTI4NzA4MTY2NTM2NiZvcGVuSWQ9YzFkNDlkOGZiZjk4YzAyZDU1ZTY0NjdiN2NjNWNlZTI=", //3abodXzdXen
@@ -457,13 +455,60 @@ async function checkPassword() {
     }
 }
 
-// ===== SECRET CONTENT =====
+// ===== SECRET CONTENT - IMPROVED =====
 function openSecretContent(encodedUrl) {
     const contentFrame = document.getElementById('contentFrame');
     if (contentFrame) {
         try {
+            // Show loading message
+            showNotification('Loading content...', 'info');
+            
             // Decode Base64 here, before setting as src
             const decodedUrl = atob(encodedUrl);
+            console.log('Loading URL:', decodedUrl.substring(0, 50) + '...');
+            
+            // Set iframe properties for better loading
+            contentFrame.style.width = '100%';
+            contentFrame.style.height = '100vh';
+            contentFrame.style.border = 'none';
+            contentFrame.style.background = '#0a0a0a';
+            contentFrame.style.display = 'block';
+            
+            // Add load event listeners
+            contentFrame.onload = function() {
+                console.log('Content loaded successfully');
+                showNotification('Content loaded successfully!', 'success');
+                
+                // Hide loading after successful load
+                setTimeout(() => {
+                    const notifications = document.querySelectorAll('.notification');
+                    notifications.forEach(n => n.remove());
+                }, 2000);
+            };
+            
+            contentFrame.onerror = function() {
+                console.error('Failed to load content');
+                showError('Failed to load content. Please check your internet connection.');
+                // Return to access section on error
+                document.getElementById('contentSection').style.display = 'none';
+                document.getElementById('accessSection').style.display = 'block';
+                hideRefreshButton();
+            };
+            
+            // Handle iframe load timeout
+            const loadTimeout = setTimeout(() => {
+                if (!contentFrame.contentDocument || contentFrame.contentDocument.readyState !== 'complete') {
+                    console.warn('Content loading timeout');
+                    showNotification('Content is taking longer to load...', 'info');
+                }
+            }, 5000);
+            
+            // Clear timeout when loaded
+            contentFrame.addEventListener('load', () => {
+                clearTimeout(loadTimeout);
+            });
+            
+            // Set the source URL
             contentFrame.src = decodedUrl;
             
             // Show content section and hide access section
@@ -476,9 +521,10 @@ function openSecretContent(encodedUrl) {
         } catch (e) {
             console.error("Error decoding or loading URL:", e);
             showError("An error occurred while loading content. Please try again.");
-            // Optionally, hide content section and show access section again
+            // Hide content section and show access section again
             document.getElementById('contentSection').style.display = 'none';
             document.getElementById('accessSection').style.display = 'block';
+            hideRefreshButton();
         }
     } else {
         console.error("Content frame not found.");
@@ -534,17 +580,39 @@ function showNotification(message, type = 'info') {
     notification.className = `notification ${type}`;
     notification.textContent = message;
     
+    // Add styles
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.padding = '12px 20px';
+    notification.style.borderRadius = '8px';
+    notification.style.color = 'white';
+    notification.style.fontWeight = '500';
+    notification.style.zIndex = '10001';
+    notification.style.transform = 'translateX(100%)';
+    notification.style.transition = 'transform 0.3s ease';
+    notification.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.4)';
+    
+    // Set background based on type
+    if (type === 'success') {
+        notification.style.background = 'linear-gradient(135deg, #00ff7f, #00cc66)';
+    } else if (type === 'error') {
+        notification.style.background = 'linear-gradient(135deg, #ff3333, #cc0000)';
+    } else {
+        notification.style.background = 'linear-gradient(135deg, #5865f2, #4752c4)';
+    }
+    
     // Add to page
     document.body.appendChild(notification);
     
     // Show notification
     setTimeout(() => {
-        notification.classList.add('show');
+        notification.style.transform = 'translateX(0)';
     }, 100);
     
     // Hide and remove notification
     setTimeout(() => {
-        notification.classList.remove('show');
+        notification.style.transform = 'translateX(100%)';
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.parentNode.removeChild(notification);
