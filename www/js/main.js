@@ -14,3 +14,26 @@ async function loadSettings() {
 }
 
 loadSettings();
+function showOfflineScreen() {
+  let blackout = document.createElement("div");
+  blackout.style.position = "fixed";
+  blackout.style.top = "0";
+  blackout.style.left = "0";
+  blackout.style.width = "100%";
+  blackout.style.height = "100%";
+  blackout.style.backgroundColor = "black";
+  blackout.style.zIndex = "9999";
+  blackout.id = "offlineScreen";
+  document.body.appendChild(blackout);
+}
+
+function hideOfflineScreen() {
+  const blackout = document.getElementById("offlineScreen");
+  if (blackout) {
+    blackout.remove();
+  }
+}
+
+window.addEventListener("offline", showOfflineScreen);
+window.addEventListener("online", hideOfflineScreen);
+
