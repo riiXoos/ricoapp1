@@ -6,6 +6,20 @@ let isAdminLoggedIn = false;
 let visitorsListener = null;
 let statsListener = null;
 
+function showOfflineScreen() {
+  const blackout = document.createElement("div");
+  blackout.style.position = "fixed";
+  blackout.style.top = 0;
+  blackout.style.left = 0;
+  blackout.style.width = "100%";
+  blackout.style.height = "100%";
+  blackout.style.backgroundColor = "black";
+  blackout.style.zIndex = 99999;
+  document.body.appendChild(blackout);
+}
+
+window.addEventListener("offline", showOfflineScreen);
+
 // Admin password
 const ADMIN_PASSWORD = "rico011899009";
 
