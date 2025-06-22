@@ -1,36 +1,35 @@
 {
-  ADMIN_PASSWORD = "rico011899009";
+  "ADMIN_PASSWORD" : "rico011899009";
 
 // Secret links database (same as original)
-secretLinks = {
+"secretLinks" {
     "ensasafayed2!": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV92biZodGdzZXJ2ZXI9bG9naW4teHluLXRlc3QyLmhrY3hzZC5jb20mcmFuPTAuNjM5NDcwMjc5NjA0OTczNSZvcGVuSWQ9YTEw",    //testXteq
             "010045!": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hYWExJiY=",    //dadyXftgt
             "s40013543!": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjY5NTI4NzA4MTY2NTM2NiZvcGVuSWQ9YzFkNDlkOGZiZjk4YzAyZDU1ZTY0NjdiN2NjNWNlZTI=", //3abodXzdXen
             "sasafayed2!": "aHR0cHM6Ly9jZG4tbW16eW4uY3lwaGVyLXN0dWRpby5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV92biZodGdzZXJ2ZXI9bG9naW4teHluLXRlc3QyLmhrY3hzZC5jb20mcmFuPTAuMDYyMTY5MDc2NzQzMTY3Mjk1Jm9wZW5JZD1hMTAmJg==",  //ventam1
             "Squall87Abdsy": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuMjA3MDU1MDg0OTM0MDAzMjYmb3BlbklkPWEx",
 
-            // مجموعة 2 (مواقع تطوير)
+            
             "Ahmed@1410": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPWFhYTE=",  //zeroxen
             "wayland!": "aHR0cHM6Ly94czNlbi1kZXYuc2t5Ymx1ZWsuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWJneXhfZW5nJmh0Z3NlcnZlcj1sb2dpbi14czNlbi1kZXYuc2t5Ymx1ZWsuY29tJmh0Z3RlbXA9eHMzZW4tZGV2LnNreWJsdWVrLmNvbSZ0aW1lc3RhbXA9MTc0NzI0OTAyOTMyNCZodGdhZ2U9MjAmc2lnbj1EQTVFQTQ1RTc5NUE3NDkwODEyQTg2QTgyMUUxMUFFRCZsYW5ndWFnZT1lbl91cyZvcGVuSWQ9YWFhMQ==",     //x3en1
             "mazika778899!": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hYWEz",    //eslamxchina
             "xjsfreeencjp2": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPWNqcDImJg==",   //saleXjsqq
             "lona4718charge": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X21lJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjQ2NTkxMjYwMjcwMDM5ODgmb3BlbklkPWNjZWQ0OGNkYWUyMTYyZjc5YzhiZjY2NmU0YTY4MDRk",   //sale4Xjsqq
 
-            // مجموعة 3 (أخبار وتقنية)
+            
             "135790!": "aHR0cHM6Ly9jZG4teHd4dHdvLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV9mdGd0Jmh0Z3NlcnZlcj1sb2dpbi14anNxcS5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1kNDdkY2YzNjkwYTY5Y2RlNDVkYjI5NWVkM2UzNGFkNA==",   //catrineXen
             "140714071": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1hYWExJiY=",   //ricoXzd
             "s02008m!": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1hYWEzJiY=",
             "arabicver99cop9": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1hYWE3Jg==",
             "ricojade#": "aHR0cHM6Ly9jZG4teHMzeHguc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLnNreWJsdWVrLmNvbSZyYW49MC42MDI3MDAzOTg4Jm9wZW5JZD1mMjQ3YjU4ODBiZDhkMjRiNDUwYmZlN2M2M2Q1OGIxOQ==",   //samXzd
 
-            // مجموعة 4 (تعليمية)
+            
             "karizma9890!": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hYWEy",
             "amer700800": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuMjU5MzUxNjA0NTg2MTY1MjQmb3BlbklkPWFhYTY=",  //khXzd
             "hxzd455!": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuNTk0MzY0ODE3NTgzNjczMiZvcGVuSWQ9MQ==",   //hozayfaXzd
             "103251103251": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuNTk0MzY0ODE3NTgzNjczMiZvcGVuSWQ9YWFhNSYm",   //bingoXzd
             "99045!": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD0x",    //aminXzd
 
-            // مجموعة 5 (مواقع متنوعة)
             "mawda77511": "aHR0cHM6Ly9jZG4teHMzeHguc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLnNreWJsdWVrLmNvbSZyYW49MC40NjU5MTI2MDI3MDAzOTg4Jm9wZW5JZD1jMTExNzYxNjM2MTU2ZDllMjlkYjY1NmQwYzNhMDc1Ng==",  //s116Xzd
             "Ahmedaa3499!": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1hMyYm",  //zahoshXzd
             "Hicham402!": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuOTI4NTg0NjM0MDcyMTA5Jm9wZW5JZD1hMTAmJiYmJg==",   //sold1Xzd
@@ -42,7 +41,7 @@ secretLinks = {
             "Mohsetf56$#": "aHR0cHM6Ly9jZG4tbW16eW4uY3lwaGVyLXN0dWRpby5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV92biZodGdzZXJ2ZXI9bG9naW4teHluLXRlc3QyLmhrY3hzZC5jb20mcmFuPTAuNjM5NDcwMjc5NjA0OTczNSZvcGVuSWQ9YWFhMQ==",
             "aboodxzd123": "aHR0cHM6Ly9jZG4teHpkLnNreWJsdWVrLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLWRldi5za3libHVlay5jb20mcmFuPTAuMDk5NDkwMDY3Njc3MTgxMzgmb3BlbklkPTEyMw==",
 
-            // مجموعة 6 (أخبار وتقنية)
+           
             "AB346092ABs11!": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfbWUmaHRnc2VydmVyPWxvZ2luLXh6ZC5za3libHVlay5jb20mcmFuPTAuMjU5MzUxNjA0NTg2MTY1MjQmb3BlbklkPWUyYjA2MzRlNTYwMmRkZGFkNjcwMTM4N2JmNDYyMDlm",   //soras11XzdXen
             "Squall8725!": "aHR0cHM6Ly9jZG4tbW16eW4uY3lwaGVyLXN0dWRpby5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV92biZodGdzZXJ2ZXI9bG9naW4teHluLXRlc3QyLmhrY3hzZC5jb20mcmFuPTAuNjM5NDcwMjc5NjA0OTczNSZvcGVuSWQ9YWFhMg==",
             "SuperMan": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hMTA=",
@@ -54,7 +53,6 @@ secretLinks = {
             "MaZikA00!": "aHR0cHM6Ly9jZG4tbW16eW4uY3lwaGVyLXN0dWRpby5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9c2djcV92biZodGdzZXJ2ZXI9bG9naW4teHluLXRlc3QyLmhrY3hzZC5jb20mcmFuPTAuNjM5NDcwMjc5NjA0OTczNSZvcGVuSWQ9YTE=",
             "Dracula1omar": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD1hMTE=",
 
-            // مجموعة 7 (تعليم وثقافة)
             "lokiloki": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC4zODA4MzYzNTk5MTIzMTE4Jm9wZW5JZD1hYWEyJiYmJiYm",   //karizmaXjsqq
             "asdasd3388": "aHR0cHM6Ly94ZnRndC1kZXYuc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1zZ2NxX2Z0Z3QmaHRnc2VydmVyPWxvZ2luLXhmdGd0LWRldi5zemZhbmd6aG91aGQuY29tJnJhbj0wLjA1NzkxMTg5MDY1NDE4NDY3Jm9wZW5JZD0xMQ==",  //ploutoXjsaqq
             "ennewa10!": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC4zODA4MzYzNTk5MTIzMTE4Jm9wZW5JZD1hMTAmJiY=",   //fahdXjsqq
@@ -65,7 +63,6 @@ secretLinks = {
             "jz44charge": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X21lJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjQ2NTkxMjYwMjcwMDM5ODgmb3BlbklkPWViYzc5OTNjY2Q0NTJiNDRjNjQzY2VmMzU2MWE0ZjJm",  //JzarXzdXen
             "s87544!": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9ZnJzanpfbWUmaHRnc2VydmVyPWxvZ2luLXh6ZC5za3libHVlay5jb20mcmFuPTAuMjU5MzUxNjA0NTg2MTY1MjQmb3BlbklkPWE0YWQyZDJiYjdjNzgwOGVkYWZhMWI5YjVmYTE3OGIx",   //mazikaXzdXen
 
-            // مجموعة 9 (Turkish)
             "Fahadmnm121@!": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPTEyJiYmJiYm",
             "Dragon5544": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPSZvcGVuSWQ9YTE=",
             "Mazika15987!": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWEyJg==",
@@ -79,7 +76,6 @@ secretLinks = {
             "Professor0": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPTExMQ==",
             "Cjp7733!": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWNqcDEm",
 
-            // المجموعة الجديدة 10 (freeAcc)
             "amrsalamacharge": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X21lJmh0Z3NlcnZlcj1sb2dpbi14emQuc2t5Ymx1ZWsuY29tJnJhbj0wLjQ2NTkxMjYwMjcwMDM5ODgmb3BlbklkPTJiYWY1NDA1OThjMTEwNzIwZjU1OTk2NTgzYjI4ZTUy",
             "trteqxsale10": "aHR0cHM6Ly9jZG4teHRlcS5zemZhbmd6aG91aGQuY29tL2luZGV4Lmh0bWw/ZGVidWc9MSZ6b25lS2V5PWZyc2p6X3RyJmh0Z3NlcnZlcj1sb2dpbi14dGVxLWRldi5za3libHVlay5jb20mcmFuPTAuMzI2NTg3NTU5NDEzMTg0MDcmb3BlbklkPWExMA==",
             "enfreeJP4": "aHR0cHM6Ly9jZG4teGVuLnN6ZmFuZ3pob3VoZC5jb20vaW5kZXguaHRtbD9kZWJ1Zz0xJnpvbmVLZXk9Z2hfZW5nJmh0Z3NlcnZlcj1sb2dpbi14anNxcS1kZXYuc3pmYW5nemhvdWhkLmNvbSZyYW49MC42OTUyODcwODE2NjUzNjYmb3BlbklkPWNqcDQ=",
@@ -186,6 +182,5 @@ secretLinks = {
         "sena100200#": "aHR0cHM6Ly9jZG4teHMzeHguc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLnNreWJsdWVrLmNvbSZyYW49MC40NjU5MTI2MDI3MDAzOTg4Jm9wZW5JZD1hYjI3ZTg1NzExMzcwYTViNGUyNTI5YmY1YjBiMWU2ZQ==",
         "hicham91#": "aHR0cHM6Ly9jZG4teHMzeHguc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLnNreWJsdWVrLmNvbSZyYW49MC40NjU5MTI2MDI3MDAzOTg4Jm9wZW5JZD04NzMzMGIyZDIwOGJlNTMzY2FkYzc4YTdhNTlhYmI5Ng==",
         "scorpion#": "aHR0cHM6Ly9jZG4teHMzeHguc3pmYW5nemhvdWhkLmNvbS9pbmRleC5odG1sP2RlYnVnPTEmem9uZUtleT1mcnNqel9tZSZodGdzZXJ2ZXI9bG9naW4teHpkLnNreWJsdWVrLmNvbSZyYW49MC40NjU5MTI2MDI3MDAzOTg4Jm9wZW5JZD0yODlhY2E0ZTViZjBkZjk3ZDM4MjU5YjNiZWRmYjJhMA=="
-    // Add more codes as needed...
-};
+  }
 }
