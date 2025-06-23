@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; url=app-debug.apk" />
-    <title>Starting download...</title>
-  </head>
-  <body>
-    <p>If the download does not start, <a href="app-debug.apk">click here</a>.</p>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <title>جاري تحميل التطبيق...</title>
+  <meta http-equiv="refresh" content="0; url=../app-debug.apk" />
+</head>
+<body>
+  <p>إذا لم يبدأ التحميل تلقائيًا، <a href="../app-debug.apk">اضغط هنا لتحميل التطبيق</a>.</p>
+</body>
 </html>
