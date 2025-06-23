@@ -14,16 +14,13 @@
 
 /* ===== EXTRA SMALL DEVICES (0px - 575px) ===== */
 @media (max-width: 575px) {
+    .container {
+        max-width: 95% !important;
+        padding: 2rem 1.5rem !important;
+    }
     .logo {
-        width: 50px !important;
-        height: 50px !important;
+        margin-bottom: 1.5rem !important;
     }
-    .logo .logo-text {
-        font-size: 1.2rem !important;
-    }
-}
-
-@media (max-width: 575px) {
     :root {
         --spacing-xs: 0.2rem;
         --spacing-sm: 0.4rem;
@@ -558,6 +555,13 @@
 
 /* Responsive display utilities */
 @media (max-width: 575px) {
+    .container {
+        max-width: 95% !important;
+        padding: 2rem 1.5rem !important;
+    }
+    .logo {
+        margin-bottom: 1.5rem !important;
+    }
     .d-xs-none { display: none !important; }
     .d-xs-block { display: block !important; }
     .d-xs-flex { display: flex !important; }
@@ -593,6 +597,13 @@
 .text-right { text-align: right !important; }
 
 @media (max-width: 575px) {
+    .container {
+        max-width: 95% !important;
+        padding: 2rem 1.5rem !important;
+    }
+    .logo {
+        margin-bottom: 1.5rem !important;
+    }
     .text-xs-center { text-align: center !important; }
 }
 
@@ -612,6 +623,13 @@
 
 /* Responsive spacing */
 @media (max-width: 575px) {
+    .container {
+        max-width: 95% !important;
+        padding: 2rem 1.5rem !important;
+    }
+    .logo {
+        margin-bottom: 1.5rem !important;
+    }
     .p-xs-1 { padding: var(--spacing-sm) !important; }
     .m-xs-1 { margin: var(--spacing-sm) !important; }
 }
@@ -641,6 +659,13 @@
 
 /* Responsive flexbox */
 @media (max-width: 575px) {
+    .container {
+        max-width: 95% !important;
+        padding: 2rem 1.5rem !important;
+    }
+    .logo {
+        margin-bottom: 1.5rem !important;
+    }
     .flex-xs-column { flex-direction: column !important; }
 }
 
