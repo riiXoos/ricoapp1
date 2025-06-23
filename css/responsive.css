@@ -14,6 +14,16 @@
 
 /* ===== EXTRA SMALL DEVICES (0px - 575px) ===== */
 @media (max-width: 575px) {
+    .logo {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    .logo .logo-text {
+        font-size: 1.2rem !important;
+    }
+}
+
+@media (max-width: 575px) {
     :root {
         --spacing-xs: 0.2rem;
         --spacing-sm: 0.4rem;
