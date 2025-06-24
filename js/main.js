@@ -1,4 +1,4 @@
-// Main JavaScript file for Rico World App
+// Main JavaScript file for Rico World App (Full Version with Firebase Secure Loading)
 
 // ===== GLOBAL VARIABLES =====
 let currentUser = null;
@@ -43,23 +43,42 @@ db.collection("config").doc("secrets").get()
     if (doc.exists) {
       secretLinks = doc.data();
       console.log("✅ تم تحميل البيانات:", secretLinks);
-      if (typeof initApp === 'function') initApp();
+      initApp();
     } else {
       console.error("❌ البيانات غير موجودة");
+      showError("لم يتم تحميل البيانات من السيرفر");
+      hideLoading();
     }
   })
   .catch((error) => {
     console.error("❌ خطأ في تحميل البيانات:", error);
+    showError("حدث خطأ أثناء تحميل البيانات");
+    hideLoading();
   });
 
-// ===== APPLICATION INIT =====
+// ===== APP INITIALIZATION =====
 function initApp() {
   setupEventListeners();
-  setupPasswordCheck();
-  setupGameAccess();
+  initializeUI();
+  hideLoading();
 }
 
-// ===== SETUP EVENTS =====
+// ===== UI CONTROL =====
+function hideLoading() {
+  const screen = document.getElementById('loadingScreen');
+  if (screen) screen.style.display = 'none';
+}
+
+function showError(message) {
+  const errorBox = document.getElementById('errorMsg');
+  if (errorBox) {
+    errorBox.querySelector('.message-text').textContent = message;
+    errorBox.style.display = 'flex';
+    setTimeout(() => errorBox.style.display = 'none', 4000);
+  }
+}
+
+// ===== EVENT LISTENERS =====
 function setupEventListeners() {
   const passwordInput = document.getElementById('passwordInput');
   if (passwordInput) {
@@ -76,16 +95,21 @@ function setupEventListeners() {
   }
 }
 
-// ===== CHECK PASSWORD =====
+function initializeUI() {
+  const progressBar = document.querySelector('.loading-progress');
+  if (progressBar) {
+    progressBar.style.width = '100%';
+  }
+}
+
+// ===== PASSWORD HANDLING =====
 function checkPassword() {
   const input = document.getElementById('passwordInput');
   const code = input.value.trim();
-
   if (!code) {
     showError('Please enter access code');
     return;
   }
-
   if (secretLinks[code]) {
     const url = atob(secretLinks[code]);
     openSecretContent(url);
@@ -97,21 +121,19 @@ function checkPassword() {
 function checkGamePassword() {
   const input = document.getElementById('gameIdInput');
   const code = input.value.trim();
-
   if (!code) {
     showError('Please enter access code');
     return;
   }
-
   if (secretLinks[code]) {
     const url = atob(secretLinks[code]);
     openSecretContent(url);
+    closeGameIdPage();
   } else {
     showError('Invalid access code!');
   }
 }
 
-// ===== OPEN SECRET CONTENT =====
 function openSecretContent(url) {
   const frame = document.getElementById('contentFrame');
   const container = document.getElementById('mainContainer');
@@ -140,17 +162,7 @@ function goBack() {
   }
 }
 
-// ===== ERROR DISPLAY =====
-function showError(msg) {
-  const box = document.getElementById('errorMsg');
-  if (box) {
-    box.querySelector('.message-text').textContent = msg;
-    box.style.display = 'flex';
-    setTimeout(() => box.style.display = 'none', 4000);
-  }
-}
-
-// ===== GAME MENU =====
+// ===== GAMES =====
 function toggleGamesMenu() {
   const menu = document.getElementById('gamesMenu');
   if (menu) menu.classList.toggle('visible');
@@ -180,7 +192,7 @@ function openDiscord() {
   window.open('https://discord.gg/YDB8MfQ8', '_blank');
 }
 
-// ===== EXPORT TO WINDOW =====
+// ===== EXPORT FUNCTIONS TO WINDOW =====
 window.checkPassword = checkPassword;
 window.checkGamePassword = checkGamePassword;
 window.goBack = goBack;
