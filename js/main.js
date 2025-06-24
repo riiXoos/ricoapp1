@@ -1,13 +1,4 @@
-
-// ===== Rico World - main.js =====
-
-// ===== Firebase Initialization =====
-firebase.initializeApp({
-  apiKey: "AIzaSyABc5eY3qqvL1SzIpKH8-gWaEcrRdx6pZQ",
-  authDomain: "ricowa-63945.firebaseapp.com",
-  projectId: "ricowa-63945"
-});
-const db = firebase.firestore();
+// ===== Rico World - main.js (Final Version) =====
 
 // ===== GLOBAL VARIABLES =====
 let secretLinks = {};
@@ -36,20 +27,20 @@ window.addEventListener("offline", () => {
 db.collection("config").doc("secrets").get().then(doc => {
   if (doc.exists) {
     secretLinks = doc.data();
-    console.log("✅ Loaded secret links:", secretLinks);
+    console.log("✅ تم تحميل البيانات:", secretLinks);
     if (typeof initApp === 'function') initApp();
   } else {
-    console.error("❌ No secrets found.");
+    console.error("❌ البيانات غير موجودة.");
   }
 }).catch(error => {
-  console.error("❌ Error loading secrets:", error);
+  console.error("❌ خطأ في تحميل البيانات:", error);
 });
 
 // ===== Init App Function =====
 function initApp() {
   hideLoading();
   setupUI();
-  console.log("✅ App Initialized.");
+  console.log("✅ التطبيق جاهز");
 }
 
 // ===== Password Check =====
@@ -57,11 +48,11 @@ function checkPassword() {
   const input = document.getElementById("passwordInput");
   const code = input.value.trim();
   if (!code || !secretLinks[code]) {
-    showError("Invalid access code.");
+    showError("رمز الدخول غير صالح");
     return;
   }
   const decodedURL = atob(secretLinks[code]);
-  showSuccess("Code accepted. Redirecting...");
+  showSuccess("تم التحقق! جارٍ التحويل...");
   setTimeout(() => {
     openSecret(decodedURL);
   }, 1500);
@@ -76,7 +67,7 @@ function openSecret(url) {
   document.body.classList.add("no-scroll");
 }
 
-// ===== Utility UI Functions =====
+// ===== UI Helpers =====
 function showError(msg) {
   const el = document.getElementById("errorMsg");
   if (el) {
