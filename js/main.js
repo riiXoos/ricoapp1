@@ -1,28 +1,3 @@
-
-// 🔒 تحميل البيانات السرية من Firebase Firestore بدلاً من الأكواد الثابتة
-firebase.initializeApp({
-  apiKey: "AIzaSyABc5eY3qqvL1SzIpKH8-gWaEcrRdx6pZQ",
-  authDomain: "ricowa-63945.firebaseapp.com",
-  projectId: "ricowa-63945"
-});
-const db = firebase.firestore();
-
-let secretLinks = {};
-firebase.firestore().collection("config").doc("secrets").get()
-  .then((doc) => {
-    if (doc.exists) {
-      secretLinks = doc.data();
-      console.log("✅ تم تحميل البيانات:", secretLinks);
-      if (typeof initApp === 'function') initApp();
-    } else {
-      console.error("❌ المستند غير موجود!");
-    }
-  })
-  .catch((error) => {
-    console.error("❌ خطأ في الاتصال بـ Firebase:", error);
-  });
-
-
 // Main JavaScript file for Rico World App
 
 // ===== GLOBAL VARIABLES =====
