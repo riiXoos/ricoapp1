@@ -1,35 +1,7 @@
-// Main JavaScript file for Rico World App
 
-// ===== GLOBAL VARIABLES =====
-let currentUser = null;
-let isAdminLoggedIn = false;
-let visitorsListener = null;
-let statsListener = null;
-let secretLinks = {};
+// ===== Rico World - main.js =====
 
-// ===== SHOW OFFLINE SCREEN =====
-function showOfflineScreen() {
-  const blackout = document.createElement("div");
-  blackout.style.position = "fixed";
-  blackout.style.top = 0;
-  blackout.style.left = 0;
-  blackout.style.width = "100%";
-  blackout.style.height = "100%";
-  blackout.style.backgroundColor = "black";
-  blackout.style.zIndex = 99999;
-  blackout.style.display = "flex";
-  blackout.style.alignItems = "center";
-  blackout.style.justifyContent = "center";
-  blackout.style.color = "white";
-  blackout.style.fontSize = "20px";
-  blackout.textContent = "⚠️ تم فقد الاتصال بالإنترنت";
-  document.body.innerHTML = "";
-  document.body.appendChild(blackout);
-}
-
-window.addEventListener("offline", showOfflineScreen);
-
-// ===== FIREBASE INITIALIZATION =====
+// ===== Firebase Initialization =====
 firebase.initializeApp({
   apiKey: "AIzaSyABc5eY3qqvL1SzIpKH8-gWaEcrRdx6pZQ",
   authDomain: "ricowa-63945.firebaseapp.com",
@@ -37,154 +9,109 @@ firebase.initializeApp({
 });
 const db = firebase.firestore();
 
-// ===== LOAD SECRETS FROM FIRESTORE =====
-db.collection("config").doc("secrets").get()
-  .then((doc) => {
-    if (doc.exists) {
-      secretLinks = doc.data();
-      console.log("✅ تم تحميل البيانات:", secretLinks);
-      if (typeof initApp === 'function') initApp();
-    } else {
-      console.error("❌ البيانات غير موجودة");
-    }
-  })
-  .catch((error) => {
-    console.error("❌ خطأ في تحميل البيانات:", error);
-  });
+// ===== GLOBAL VARIABLES =====
+let secretLinks = {};
+let isAdminLoggedIn = false;
 
-// ===== APPLICATION INIT =====
+// ===== Offline Blackout =====
+window.addEventListener("offline", () => {
+  const blackout = document.createElement("div");
+  blackout.style.position = "fixed";
+  blackout.style.top = 0;
+  blackout.style.left = 0;
+  blackout.style.width = "100%";
+  blackout.style.height = "100%";
+  blackout.style.backgroundColor = "black";
+  blackout.style.color = "white";
+  blackout.style.fontSize = "24px";
+  blackout.style.display = "flex";
+  blackout.style.alignItems = "center";
+  blackout.style.justifyContent = "center";
+  blackout.style.zIndex = 99999;
+  blackout.innerText = "⚠️ تم فقد الاتصال بالإنترنت. أعد تحميل الصفحة.";
+  document.body.appendChild(blackout);
+});
+
+// ===== Load Secrets from Firebase =====
+db.collection("config").doc("secrets").get().then(doc => {
+  if (doc.exists) {
+    secretLinks = doc.data();
+    console.log("✅ Loaded secret links:", secretLinks);
+    if (typeof initApp === 'function') initApp();
+  } else {
+    console.error("❌ No secrets found.");
+  }
+}).catch(error => {
+  console.error("❌ Error loading secrets:", error);
+});
+
+// ===== Init App Function =====
 function initApp() {
-  setupEventListeners();
-  setupPasswordCheck();
-  setupGameAccess();
+  hideLoading();
+  setupUI();
+  console.log("✅ App Initialized.");
 }
 
-// ===== SETUP EVENTS =====
-function setupEventListeners() {
-  const passwordInput = document.getElementById('passwordInput');
-  if (passwordInput) {
-    passwordInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') checkPassword();
-    });
-  }
-
-  const gameIdInput = document.getElementById('gameIdInput');
-  if (gameIdInput) {
-    gameIdInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') checkGamePassword();
-    });
-  }
-}
-
-// ===== CHECK PASSWORD =====
+// ===== Password Check =====
 function checkPassword() {
-  const input = document.getElementById('passwordInput');
+  const input = document.getElementById("passwordInput");
   const code = input.value.trim();
-
-  if (!code) {
-    showError('Please enter access code');
+  if (!code || !secretLinks[code]) {
+    showError("Invalid access code.");
     return;
   }
-
-  if (secretLinks[code]) {
-    const url = atob(secretLinks[code]);
-    openSecretContent(url);
-  } else {
-    showError('Invalid access code!');
-  }
+  const decodedURL = atob(secretLinks[code]);
+  showSuccess("Code accepted. Redirecting...");
+  setTimeout(() => {
+    openSecret(decodedURL);
+  }, 1500);
 }
 
-function checkGamePassword() {
-  const input = document.getElementById('gameIdInput');
-  const code = input.value.trim();
-
-  if (!code) {
-    showError('Please enter access code');
-    return;
-  }
-
-  if (secretLinks[code]) {
-    const url = atob(secretLinks[code]);
-    openSecretContent(url);
-  } else {
-    showError('Invalid access code!');
-  }
+function openSecret(url) {
+  const iframe = document.getElementById("contentFrame");
+  const container = document.getElementById("mainContainer");
+  iframe.src = url;
+  iframe.classList.add("visible");
+  container.style.display = "none";
+  document.body.classList.add("no-scroll");
 }
 
-// ===== OPEN SECRET CONTENT =====
-function openSecretContent(url) {
-  const frame = document.getElementById('contentFrame');
-  const container = document.getElementById('mainContainer');
-  const backBtn = document.getElementById('backBtn');
-
-  if (frame && container && backBtn) {
-    frame.src = url;
-    frame.classList.add('visible');
-    container.style.display = 'none';
-    backBtn.classList.add('visible');
-  }
-}
-
-function goBack() {
-  const frame = document.getElementById('contentFrame');
-  const container = document.getElementById('mainContainer');
-  const backBtn = document.getElementById('backBtn');
-  const input = document.getElementById('passwordInput');
-
-  if (frame && container && backBtn) {
-    frame.src = '';
-    frame.classList.remove('visible');
-    container.style.display = 'flex';
-    backBtn.classList.remove('visible');
-    if (input) input.value = '';
-  }
-}
-
-// ===== ERROR DISPLAY =====
+// ===== Utility UI Functions =====
 function showError(msg) {
-  const box = document.getElementById('errorMsg');
-  if (box) {
-    box.querySelector('.message-text').textContent = msg;
-    box.style.display = 'flex';
-    setTimeout(() => box.style.display = 'none', 4000);
+  const el = document.getElementById("errorMsg");
+  if (el) {
+    el.querySelector(".message-text").innerText = msg;
+    el.style.display = "flex";
+    setTimeout(() => el.style.display = "none", 4000);
   }
 }
 
-// ===== GAME MENU =====
-function toggleGamesMenu() {
-  const menu = document.getElementById('gamesMenu');
-  if (menu) menu.classList.toggle('visible');
-}
-
-function openGameIdPage(version) {
-  const title = document.getElementById('selectedGameTitle');
-  const page = document.getElementById('gameIdPage');
-  const input = document.getElementById('gameIdInput');
-  if (title && page && input) {
-    title.textContent = version;
-    page.classList.add('visible');
-    setTimeout(() => input.focus(), 300);
+function showSuccess(msg) {
+  const el = document.getElementById("successMsg");
+  if (el) {
+    el.querySelector(".message-text").innerText = msg;
+    el.style.display = "flex";
+    setTimeout(() => el.style.display = "none", 3000);
   }
 }
 
-function closeGameIdPage() {
-  const page = document.getElementById('gameIdPage');
-  const input = document.getElementById('gameIdInput');
-  if (page && input) {
-    input.value = '';
-    page.classList.remove('visible');
+function hideLoading() {
+  const screen = document.getElementById("loadingScreen");
+  if (screen) {
+    screen.style.opacity = "0";
+    setTimeout(() => {
+      screen.style.display = "none";
+    }, 500);
   }
 }
 
-function openDiscord() {
-  window.open('https://discord.gg/YDB8MfQ8', '_blank');
+function setupUI() {
+  const input = document.getElementById("passwordInput");
+  if (input) {
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") checkPassword();
+    });
+  }
 }
 
-// ===== EXPORT TO WINDOW =====
 window.checkPassword = checkPassword;
-window.checkGamePassword = checkGamePassword;
-window.goBack = goBack;
-window.toggleGamesMenu = toggleGamesMenu;
-window.openGameIdPage = openGameIdPage;
-window.closeGameIdPage = closeGameIdPage;
-window.openDiscord = openDiscord;
