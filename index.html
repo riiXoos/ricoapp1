@@ -234,31 +234,31 @@
             </button>
         </div>
         <div class="menu-content">
-            <div class="game-option" onclick="openGameIdPage("English version")">
+            <div class="game-option" onclick="openGameIdPage('English version')">
                 <i class="fas fa-globe"></i>
                 <span>English Version</span>
             </div>
-            <div class="game-option" onclick="openGameIdPage("Vietnam version")">
+            <div class="game-option" onclick="openGameIdPage('Vietnam version')">
                 <i class="fas fa-flag"></i>
                 <span>Vietnam Version</span>
             </div>
-            <div class="game-option" onclick="openGameIdPage("China version")">
+            <div class="game-option" onclick="openGameIdPage('China version')">
                 <i class="fas fa-dragon"></i>
                 <span>China Version</span>
             </div>
-            <div class="game-option" onclick="openGameIdPage("Turkish version")">
+            <div class="game-option" onclick="openGameIdPage('Turkish version')">
                 <i class="fas fa-moon"></i>
                 <span>Turkish Version</span>
             </div>
-            <div class="game-option" onclick="openGameIdPage("New version")">
+            <div class="game-option" onclick="openGameIdPage('New version')">
                 <i class="fas fa-star"></i>
                 <span>New Version</span>
             </div>
-            <div class="game-option" onclick="openGameIdPage("Demon version")">
+            <div class="game-option" onclick="openGameIdPage('Demon version')">
                 <i class="fas fa-fire"></i>
                 <span>Demon Version</span>
             </div>
-            <div class="game-option" onclick="openGameIdPage("Dragon version")">
+            <div class="game-option" onclick="openGameIdPage('Dragon version')">
                 <i class="fas fa-dragon"></i>
                 <span>Dragon Version</span>
             </div>
@@ -325,23 +325,26 @@
     </a>
 
     <!-- شاشة فقد الاتصال -->
-    <div id="offlineOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; color: white; font-size: 24px; font-family: Arial, sans-serif; display: flex; align-items: center; justify-content: center; z-index: 999999; text-align: center;">
-      ⚠️ تم فقد الاتصال بالإنترنت<br><br>
-      يرجى إعادة تحميل الصفحة بعد التحقق من الاتصال.
-    </div>
+    <!-- شاشة فقد الاتصال -->
+<div id="offlineOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: black; color: white; font-size: 24px; font-family: Arial, sans-serif; display: flex; align-items: center; justify-content: center; z-index: 999999; text-align: center;">
+  ⚠️ تم فقد الاتصال بالإنترنت<br><br>
+  يرجى إعادة تحميل الصفحة بعد التحقق من الاتصال.
+</div>
 
-    <script>
-      window.addEventListener('load', () => {
-        const offlineOverlay = document.getElementById('offlineOverlay');
+<!-- كود إظهار الشاشة السوداء عند فقد الاتصال -->
+<script>
+  window.addEventListener('load', () => {
+    const offlineOverlay = document.getElementById('offlineOverlay');
 
-        // أول ما النت يفصل، نعرض الشاشة السوداء
-        window.addEventListener('offline', () => {
-          offlineOverlay.style.display = 'flex';
-        });
+    // لما النت يفصل
+    window.addEventListener('offline', () => {
+      offlineOverlay.style.display = 'flex';
+    });
 
-        // لما يرجع النت، لا نفعل شيء (تبقى الشاشة حتى المستخدم يعمل reload)
-      });
-    </script>
+    // لما النت يرجع: لا تفعل شيء
+  });
+</script>
+
 
 </body>
 </html>
