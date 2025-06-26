@@ -23,21 +23,23 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Secure Server (Base64 Encoded URL) =====
-const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
-const decodedURL = atob(encodedURL);
+// ===== Load Secrets from Secure Server (with base64) =====
+const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln"; // مشفر Base64
+
+const decodedURL = atob(encodedURL); // فك التشفير
 
 fetch(decodedURL)
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
-    Object.assign(secretLinks, data);
+    Object.assign(secretLinks, data.secrets); // ✅ مهم جداً
     console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
   })
   .catch(error => {
     console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
   });
+
 
 // ===== Init App Function =====
 function initApp() {
