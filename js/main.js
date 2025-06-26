@@ -1,4 +1,4 @@
-// ===== Rico World - main.js (Final Version) =====
+// ===== Rico World - main.js (Secure with Auth Token) =====
 
 let secretLinks = {};
 let isAdminLoggedIn = false;
@@ -22,15 +22,23 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Secure Server (Encoded URL)
+// ===== Load Secrets from Secure Server (with Token) =====
 const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
 const secureURL = atob(encodedURL);
+const AUTH_TOKEN = "super_secret_123";  
 
-fetch(secureURL)
-  .then(res => res.json())
+fetch(secureURL, {
+  headers: {
+    "Authorization": AUTH_TOKEN
+  }
+})
+  .then(res => {
+    if (!res.ok) throw new Error("Access Denied");
+    return res.json();
+  })
   .then(data => {
     secretLinks = {};
-    Object.assign(secretLinks, data.secrets); // تأكد أن الكولكشن فيه مستند ID = secrets
+    Object.assign(secretLinks, data.secrets);
     console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
   })
