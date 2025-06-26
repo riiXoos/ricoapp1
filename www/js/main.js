@@ -28,7 +28,7 @@ fetch('https://secure-firebase-server.onrender.com/get/config')
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
-    Object.assign(secretLinks, data);
+    Object.assign(secretLinks, data.secrets); // ✅ هذا هو التعديل المهم
     console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
   })
