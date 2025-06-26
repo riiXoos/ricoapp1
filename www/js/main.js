@@ -1,4 +1,3 @@
-// ===== main.js (Frontend + Token Auth + Encoded Secure URL) =====
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
@@ -24,7 +23,7 @@ window.addEventListener("offline", () => {
 // ===== Load Secrets from Secure Server (Encoded URL + Auth) =====
 const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
 const secureURL = atob(encodedURL);
-const authToken = "RICCOTOPSECRETKEY"; // نفس القيمة اللي في Render
+const authToken = "RICCOTOPSECRETKEY"; // نفس اللي في Render
 
 fetch(secureURL, {
   headers: {
