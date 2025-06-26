@@ -1,43 +1,40 @@
-// ===== main.js =====
+// ===== Rico World - main.js (Firebase Direct Access - Encoded URL) =====
+
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
-// ===== شاشة سوداء عند فقدان الاتصال =====
+// ===== Offline Blackout =====
 window.addEventListener("offline", () => {
   const blackout = document.createElement("div");
-  blackout.style.position = "fixed";
-  blackout.style.top = 0;
-  blackout.style.left = 0;
-  blackout.style.width = "100%";
-  blackout.style.height = "100%";
-  blackout.style.backgroundColor = "black";
-  blackout.style.color = "white";
-  blackout.style.fontSize = "24px";
-  blackout.style.display = "flex";
-  blackout.style.alignItems = "center";
-  blackout.style.justifyContent = "center";
-  blackout.style.zIndex = 99999;
+  blackout.style = `
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: black; color: white;
+    font-size: 24px; display: flex;
+    align-items: center; justify-content: center;
+    z-index: 99999;
+  `;
   blackout.innerText = "⚠️ تم فقد الاتصال بالإنترنت. أعد تحميل الصفحة.";
   document.body.appendChild(blackout);
 });
 
-// ===== تحميل البيانات من السيرفر =====
-const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
-const secureURL = atob(encodedURL);
+// ===== Firebase Config (encoded) =====
+const encodedConfig = "eyJhcGlLZXkiOiJBSXphU3lBQmM1ZVkzcXF2TDFTeklwS0g4LWdhRWNyUmR4NnBaUSIsImF1dGhEb21haW4iOiJyaWNvd2EtNjM5NDUuZmlyZWJhc2VhcHAuY29tIiwicHJvamVjdElkIjoicmljb3dhLTYzOTQ1Iiwic3RvcmFnZUJ1Y2tldCI6InJpY293YS02Mzk0NS5maXJlYmFzZXN0b3JhZ2UuYXBwIiwibWVzc2FnaW5nU2VuZGVySWQiOiI1Mjk2NTE1Nzk4MTAiLCJhcHBJZCI6IjE6NTI5NjUxNTc5ODEwOndlYjoxYTg2ODRiYTgwMTk3NGU3ODBkMGZiIn0=";
+const decodedConfig = JSON.parse(atob(encodedConfig));
+firebase.initializeApp(decodedConfig);
 
-fetch(secureURL)
-  .then(res => res.json())
-  .then(data => {
-    secretLinks = {};
-    Object.assign(secretLinks, data.secrets);
-    console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
+// ===== Load Secrets from Realtime DB =====
+firebase.database().ref("/config/secrets").once("value")
+  .then(snapshot => {
+    secretLinks = snapshot.val() || {};
+    console.log("✅ تم تحميل البيانات:", secretLinks);
     if (typeof initApp === 'function') initApp();
   })
-  .catch(error => {
-    console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
+  .catch(err => {
+    console.error("❌ خطأ في تحميل البيانات:", err);
   });
 
-// ===== وظائف التطبيق =====
+// ===== Init App =====
 function initApp() {
   hideLoading();
   setupUI();
