@@ -1,8 +1,8 @@
-// ===== Rico World - main.js (Secure with Auth Token) =====
-
+// ===== Rico World - main.js (Final Version) =====
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
+// ===== Offline Blackout =====
 window.addEventListener("offline", () => {
   const blackout = document.createElement("div");
   blackout.style.position = "fixed";
@@ -21,15 +21,11 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// === تشفير الرابط
+// ===== Load Secrets from Secure Server (Encoded URL)
 const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
 const secureURL = atob(encodedURL);
 
-fetch(secureURL, {
-  headers: {
-    'x-access-token': 'RICCOTOPSECRETKEY' // 🔐 نفس اللي في Render
-  }
-})
+fetch(secureURL)
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
