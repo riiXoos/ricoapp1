@@ -25,26 +25,22 @@ window.addEventListener("offline", () => {
 // ===== Load Secrets from Secure Server (with Token) =====
 const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
 const secureURL = atob(encodedURL);
-const AUTH_TOKEN = "super_secret_123";  
 
 fetch(secureURL, {
   headers: {
-    "Authorization": AUTH_TOKEN
+    'X-Client-Key': 'super_secret_123'
   }
 })
-  .then(res => {
-    if (!res.ok) throw new Error("Access Denied");
-    return res.json();
-  })
-  .then(data => {
-    secretLinks = {};
-    Object.assign(secretLinks, data.secrets);
-    console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
-    if (typeof initApp === 'function') initApp();
-  })
-  .catch(error => {
-    console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
-  });
+.then(res => res.json())
+.then(data => {
+  secretLinks = {};
+  Object.assign(secretLinks, data.secrets);
+  console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
+  if (typeof initApp === 'function') initApp();
+})
+.catch(error => {
+  console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
+});
 
 // ===== Init App Function =====
 function initApp() {
