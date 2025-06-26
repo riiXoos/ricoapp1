@@ -29,14 +29,13 @@ fetch('https://secure-firebase-server.onrender.com/get/config')
   .then(data => {
     secretLinks = {};
     Object.assign(secretLinks, data);
-
-    });
     console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
   })
   .catch(error => {
     console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
   });
+
 
 
 // ===== Init App Function =====
