@@ -1,4 +1,4 @@
-// ===== Rico World - main.js (Final Version) =====
+// ===== main.js (Frontend + Token Auth + Encoded Secure URL) =====
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
@@ -21,11 +21,16 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Secure Server (Encoded URL)
+// ===== Load Secrets from Secure Server (Encoded URL + Auth) =====
 const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
 const secureURL = atob(encodedURL);
+const authToken = "RICCOTOPSECRETKEY"; // نفس القيمة اللي في Render
 
-fetch(secureURL)
+fetch(secureURL, {
+  headers: {
+    'x-access-token': authToken
+  }
+})
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
@@ -44,7 +49,6 @@ function initApp() {
   console.log("✅ التطبيق جاهز");
 }
 
-// ===== Password Check =====
 function checkPassword() {
   const input = document.getElementById("passwordInput");
   const code = input.value.trim();
@@ -54,9 +58,7 @@ function checkPassword() {
   }
   const decodedURL = atob(secretLinks[code]);
   showSuccess("تم التحقق! جارٍ التحويل...");
-  setTimeout(() => {
-    openSecret(decodedURL);
-  }, 1500);
+  setTimeout(() => openSecret(decodedURL), 1500);
 }
 
 function openSecret(url) {
@@ -68,7 +70,6 @@ function openSecret(url) {
   document.body.classList.add("no-scroll");
 }
 
-// ===== UI Helpers =====
 function showError(msg) {
   const el = document.getElementById("errorMsg");
   if (el) {
@@ -91,9 +92,7 @@ function hideLoading() {
   const screen = document.getElementById("loadingScreen");
   if (screen) {
     screen.style.opacity = "0";
-    setTimeout(() => {
-      screen.style.display = "none";
-    }, 500);
+    setTimeout(() => screen.style.display = "none", 500);
   }
 }
 
