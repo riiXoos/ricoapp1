@@ -1,10 +1,9 @@
-// ===== Rico World - main.js (Final Version) =====
 
-// ===== GLOBAL VARIABLES =====
+
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
-// ===== Offline Blackout =====
+
 window.addEventListener("offline", () => {
   const blackout = document.createElement("div");
   blackout.style.position = "fixed";
@@ -23,16 +22,16 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Secure Server (with base64) =====
-const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln"; // مشفر Base64
 
-const decodedURL = atob(encodedURL); // فك التشفير
+const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
+
+const decodedURL = atob(encodedURL); 
 
 fetch(decodedURL)
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
-    Object.assign(secretLinks, data.secrets); // ✅ مهم جداً
+    Object.assign(secretLinks, data.secrets);اً
     console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
   })
@@ -41,14 +40,14 @@ fetch(decodedURL)
   });
 
 
-// ===== Init App Function =====
+
 function initApp() {
   hideLoading();
   setupUI();
   console.log("✅ التطبيق جاهز");
 }
 
-// ===== Password Check =====
+
 function checkPassword() {
   const input = document.getElementById("passwordInput");
   const code = input.value.trim();
