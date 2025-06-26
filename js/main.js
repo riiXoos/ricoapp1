@@ -23,12 +23,12 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Secure Server =====
-fetch('https://secure-firebase-server.onrender.com/get/config')
-  .then(res => {
-    if (!res.ok) throw new Error("Access Denied"); // ⛔ حماية إضافية
-    return res.json(); // ✅ فك البيانات JSON فقط لو مفيش رفض
-  })
+// ===== Load Secrets from Secure Server (Base64 Encoded URL) =====
+const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
+const decodedURL = atob(encodedURL);
+
+fetch(decodedURL)
+  .then(res => res.json())
   .then(data => {
     secretLinks = {};
     Object.assign(secretLinks, data);
@@ -38,9 +38,6 @@ fetch('https://secure-firebase-server.onrender.com/get/config')
   .catch(error => {
     console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
   });
-
-
-
 
 // ===== Init App Function =====
 function initApp() {
