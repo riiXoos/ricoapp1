@@ -24,7 +24,7 @@ window.addEventListener("offline", () => {
 });
 
 // ===== Load Secrets from Secure Server =====
-fetch('https://secure-firebase-server.onrender.com/get-data')
+fetch('https://secure-firebase-server.onrender.com/get/config')
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
