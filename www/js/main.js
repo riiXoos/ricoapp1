@@ -1,4 +1,5 @@
 
+
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
@@ -20,8 +21,6 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
 
 db.collection("config").doc("secrets").get()
   .then(doc => {
