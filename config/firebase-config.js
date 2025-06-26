@@ -1,4 +1,9 @@
-const encryptedConfig = "eyJhcGlLZXkiOiAiQUl6YVN5QUJjNWVZM3FxdkwxU3pJcEtIOC1nV2FFY3JSZHg2cFpRIiwgImF1dGhEb21haW4iOiAicmljb3dhLTYzOTQ1LmZpcmViYXNlYXBwLmNvbSIsICJwcm9qZWN0SWQiOiAicmljb3dhLTYzOTQ1IiwgInN0b3JhZ2VCdWNrZXQiOiAicmljb3dhLTYzOTQ1LmFwcHNwb3QuY29tIiwgIm1lc3NhZ2luZ1NlbmRlcklkIjogIjUyOTY1MTU3OTgxMCIsICJhcHBJZCI6ICIxOjUyOTY1MTU3OTgxMDp3ZWI6MWE4Njg0YmE4MDE5NzRlNzgwZDBmYiJ9";
-const firebaseConfig = JSON.parse(atob(encryptedConfig));
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// ===== firebase-config.js =====
+const firebaseConfig = {
+  apiKey: "AIzaSyABc5eY3qqvL1SzIpKH8-gWaEcrRdx6pZQ",
+  authDomain: "ricowa-63945.firebaseapp.com",
+  projectId: "ricowa-63945",
+  storageBucket: "ricowa-63945.appspot.com",
+  messagingSenderId: "529651579810",
+  appId: "1:529651579810:web:1a8684ba801974e780d0fb"
+};
