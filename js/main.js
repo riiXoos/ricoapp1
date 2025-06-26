@@ -1,1 +1,102 @@
-var _0xa6b5=["\x6C\x6F\x61\x64\x53\x65\x63\x72\x65\x74\x73","\x64\x61\x74\x61\x62\x61\x73\x65","\x63\x6F\x6E\x66\x69\x67\x2F\x73\x65\x63\x72\x65\x74\x73","\x76\x61\x6C","\x61\x74\x6F\x62","\x63\x6F\x6E\x73\x6F\x6C\x65","\x6C\x6F\x67","\u2705\x20\xD8\xAA\xD9\x85\x20\xD8\xAA\xD8\xAD\xD9\x85\xD9\x8A\xD9\x84\x20\xD8\xA7\xD9\x84\xD8\xA8\xD9\x8A\xD8\xA7\xD9\x86\xD8\xA7\xD8\xAA\x3A\x20","\x66\x75\x6E\x63\x74\x69\x6F\x6E","\x68\x69\x64\x65\x4C\x6F\x61\x64\x69\x6E\x67","\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x6F\x70\x61\x63\x69\x74\x79","\x30","\x73\x74\x79\x6C\x65","\x64\x69\x73\x70\x6C\x61\x79","\x6E\x6F\x6E\x65","\x68\x69\x64\x65\x4C\x6F\x61\x64\x69\x6E\x67\x28\x29","\x73\x65\x74\x54\x69\x6D\x65\x6F\x75\x74","\x73\x63\x72\x65\x65\x6E","\x6E\x6F\x6E\x65","\x70\x61\x73\x73\x77\x6F\x72\x64\x49\x6E\x70\x75\x74","\x76\x61\x6C\x75\x65","\x74\x72\x69\x6D","\x73\x68\x6F\x77\x45\x72\x72\x6F\x72","\x65\x72\x72\x6F\x72\x4D\x73\x67","\x71\x75\x65\x72\x79\x53\x65\x6C\x65\x63\x74\x6F\x72","\x2E\x6D\x65\x73\x73\x61\x67\x65\x2D\x74\x65\x78\x74","\x69\x6E\x6E\x65\x72\x54\x65\x78\x74","\x66\x6C\x65\x78","\x63\x6C\x61\x73\x73\x4C\x69\x73\x74","\x73\x75\x63\x63\x65\x73\x73\x4D\x73\x67","\x73\x68\x6F\x77\x53\x75\x63\x63\x65\x73\x73","\x73\x74\x79\x6C\x65","\x6E\x6F\x6E\x65","\x64\x69\x73\x70\x6C\x61\x79","\x73\x65\x74\x54\x69\x6D\x65\x6F\x75\x74","\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x70\x61\x73\x73\x77\x6F\x72\x64\x49\x6E\x70\x75\x74","\x6B\x65\x79","\x45\x6E\x74\x65\x72","\x63\x68\x65\x63\x6B\x50\x61\x73\x73\x77\x6F\x72\x64","\x77\x69\x6E\x64\x6F\x77","\x63\x68\x65\x63\x6B\x50\x61\x73\x73\x77\x6F\x72\x64","\x69\x6E\x69\x74\x41\x70\x70","\x73\x65\x74\x55\x70\x55\x49","\x61\x64\x64\x45\x76\x65\x6E\x74\x4C\x69\x73\x74\x65\x6E\x65\x72"];function loadSecrets(){firebase[_0xa6b5[1]]()[_0xa6b5[0]](_0xa6b5[2])[_0xa6b5[3]](snapshot=>{const _0xdeb5x2= snapshot[_0xa6b5[3]]();if(_0xdeb5x2){secretLinks={};for(let _0xdeb5x3 in _0xdeb5x2){try{secretLinks[_0xdeb5x3]= window[_0xa6b5[4]](_0xdeb5x2[_0xdeb5x3])}catch(e){console[_0xa6b5[5]](_0xa6b5[6],_0xdeb5x3)}};console[_0xa6b5[5]](_0xa6b5[6],secretLinks);if(typeof initApp=== _0xa6b5[7]){initApp()}}})[_0xa6b5[3]](error=>{console[_0xa6b5[5]]("\u274C\x20\u062E\u0637\u0623\u20...",error)})}loadSecrets();function initApp(){hideLoading();setupUI();console[_0xa6b5[5]]("\u2705\x20\u0627\u0644\u062A\u0637\u0628\u064A\u0642\x20\u062C\u0627\u0647\u0632")}function hideLoading(){const _0xdeb5x4=document[_0xa6b5[9]](_0xa6b5[8]);if(_0xdeb5x4){_0xdeb5x4[_0xa6b5[12]][_0xa6b5[10]]= _0xa6b5[11];setTimeout(()=>{_0xdeb5x4[_0xa6b5[12]][_0xa6b5[13]]= _0xa6b5[14]},500)}}function checkPassword(){const _0xdeb5x5=document[_0xa6b5[9]](_0xa6b5[18]);const _0xdeb5x6=_0xdeb5x5[_0xa6b5[20]][_0xa6b5[19]]();if(!_0xdeb5x6||!secretLinks[_0xdeb5x6]){showError("\u0631\u0645\u0632\x20\u0627\u0644\u062F\u062E\u0648\u0644\x20\u063A\u064A\u0631\x20\u0635\u0627\u0644\u062D");return};showSuccess("\u062A\u0645\x20\u0627\u0644\u062A\u062D\u0642\u0642\x21\x20\u062C\u0627\u0631\u064D\x20\u0627\u0644\u062A\u062D\u0648\u064A\u0644\u2026");setTimeout(()=>openSecret(secretLinks[_0xdeb5x6]),1500)}function showError(_0xdeb5x7){const _0xdeb5x8=document[_0xa6b5[9]](_0xa6b5[22]);if(_0xdeb5x8){_0xdeb5x8[_0xa6b5[25]](_0xa6b5[24])[_0xa6b5[26]]= _0xdeb5x7;_0xdeb5x8[_0x_]()_]()_)_]()]()_]()_]()]()_]()_)_]()_]()_]()_]()_]()]()]()_]())_]()_]()_]()_]()_)_]()_]()]()_)_]()_)_]()_]()_
+// ===== main.js (Encrypted & Clean Version) =====
+
+(function () {
+  let s = {};
+  let a = false;
+
+  window.addEventListener("offline", () => {
+    const d = document.createElement("div");
+    Object.assign(d.style, {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "black",
+      color: "white",
+      fontSize: "24px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 99999
+    });
+    d.innerText = "⚠️ تم فقد الاتصال بالإنترنت. أعد تحميل الصفحة.";
+    document.body.appendChild(d);
+  });
+
+  const u = atob("aHR0cHM6Ly9maXJlYmFzZWdvb2dsZWFwaXMuY29tL3YxL2JwL3JpY293YS02Mzk0NS9kYXRhL2NvbmZpZy9zZWNyZXRzIgs=");
+
+  firebase.initializeApp({
+    apiKey: "AIzaSyABc5eY3qqvL1SzIpKH8-gWaEcrRdx6pZQ",
+    authDomain: "ricowa-63945.firebaseapp.com",
+    projectId: "ricowa-63945"
+  });
+  const db = firebase.firestore();
+
+  db.doc("config/secrets").get().then(doc => {
+    if (doc.exists) {
+      s = doc.data();
+      console.log("✅ Loaded:", s);
+      if (typeof window.i === 'function') window.i();
+    } else {
+      console.error("❌ No data found");
+    }
+  }).catch(e => console.error("❌ Firebase Error:", e));
+
+  window.p = function () {
+    const i = document.getElementById("passwordInput");
+    const c = i.value.trim();
+    if (!c || !s[c]) return f("رمز الدخول غير صالح");
+    const u = atob(s[c]);
+    h("تم التحقق! جارٍ التحويل...");
+    setTimeout(() => o(u), 1500);
+  };
+
+  function o(url) {
+    const f = document.getElementById("contentFrame");
+    const m = document.getElementById("mainContainer");
+    f.src = url;
+    f.classList.add("visible");
+    m.style.display = "none";
+    document.body.classList.add("no-scroll");
+  }
+
+  function f(t) {
+    const e = document.getElementById("errorMsg");
+    if (e) {
+      e.querySelector(".message-text").innerText = t;
+      e.style.display = "flex";
+      setTimeout(() => e.style.display = "none", 4000);
+    }
+  }
+
+  function h(t) {
+    const e = document.getElementById("successMsg");
+    if (e) {
+      e.querySelector(".message-text").innerText = t;
+      e.style.display = "flex";
+      setTimeout(() => e.style.display = "none", 3000);
+    }
+  }
+
+  function l() {
+    const e = document.getElementById("loadingScreen");
+    if (e) {
+      e.style.opacity = "0";
+      setTimeout(() => e.style.display = "none", 500);
+    }
+  }
+
+  function uI() {
+    const i = document.getElementById("passwordInput");
+    if (i) i.addEventListener("keypress", e => {
+      if (e.key === "Enter") window.p();
+    });
+  }
+
+  window.i = function () {
+    l();
+    uI();
+    console.log("✅ Ready");
+  }
+})();
