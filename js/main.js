@@ -28,8 +28,8 @@ fetch('https://secure-firebase-server.onrender.com/get/config')
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
-    data.forEach(entry => {
-      Object.assign(secretLinks, entry);
+    Object.assign(secretLinks, data);
+
     });
     console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
