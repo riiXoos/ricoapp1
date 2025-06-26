@@ -23,11 +23,15 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
+// ===== Load Secrets from Secure Server =====
 fetch('https://secure-firebase-server.onrender.com/get/config')
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) throw new Error("Access Denied"); // ⛔ حماية إضافية
+    return res.json(); // ✅ فك البيانات JSON فقط لو مفيش رفض
+  })
   .then(data => {
     secretLinks = {};
-    Object.assign(secretLinks, data.secrets); // ✅ هذا هو التعديل المهم
+    Object.assign(secretLinks, data);
     console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
   })
