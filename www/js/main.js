@@ -3,7 +3,6 @@
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
-// ===== Offline Blackout =====
 window.addEventListener("offline", () => {
   const blackout = document.createElement("div");
   blackout.style.position = "fixed";
@@ -22,13 +21,14 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Secure Server (with Token) =====
+// === تشفير الرابط
 const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
 const secureURL = atob(encodedURL);
 
+// ===== طلب البيانات مع التوكن السري
 fetch(secureURL, {
   headers: {
-    'X-Client-Key': 'super_secret_123'
+    'X-Client-Key': 'super_secret_123' // مهم جدًا
   }
 })
 .then(res => res.json())
