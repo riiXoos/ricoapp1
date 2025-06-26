@@ -1,7 +1,8 @@
+// ===== main.js =====
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
-// ===== Offline Blackout =====
+// ===== شاشة سوداء عند فقدان الاتصال =====
 window.addEventListener("offline", () => {
   const blackout = document.createElement("div");
   blackout.style.position = "fixed";
@@ -20,16 +21,11 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Secure Server (Encoded URL + Auth) =====
+// ===== تحميل البيانات من السيرفر =====
 const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
 const secureURL = atob(encodedURL);
-const authToken = "RICCOTOPSECRETKEY"; // نفس اللي في Render
 
-fetch(secureURL, {
-  headers: {
-    'x-access-token': authToken
-  }
-})
+fetch(secureURL)
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
@@ -41,7 +37,7 @@ fetch(secureURL, {
     console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
   });
 
-// ===== Init App Function =====
+// ===== وظائف التطبيق =====
 function initApp() {
   hideLoading();
   setupUI();
