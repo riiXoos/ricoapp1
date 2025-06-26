@@ -25,7 +25,6 @@ window.addEventListener("offline", () => {
 
 // ===== Load Secrets from Secure Server (with base64) =====
 const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln"; // مشفر Base64
-
 const decodedURL = atob(encodedURL); // فك التشفير
 
 fetch(decodedURL)
@@ -37,9 +36,8 @@ fetch(decodedURL)
     if (typeof initApp === 'function') initApp();
   })
   .catch(error => {
-    console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
+    console.error("❌ خطأ في تحميل البيانات من السيرفر:", error); // ✅ هنا كانت الغلطة
   });
-
 
 // ===== Init App Function =====
 function initApp() {
