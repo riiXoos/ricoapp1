@@ -1,6 +1,5 @@
 // ===== Rico World - main.js (Final Version) =====
 
-// ===== GLOBAL VARIABLES =====
 let secretLinks = {};
 let isAdminLoggedIn = false;
 
@@ -23,20 +22,20 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Secure Server (with base64) =====
-const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln"; // مشفر Base64
-const decodedURL = atob(encodedURL); // فك التشفير
+// ===== Load Secrets from Secure Server (Encoded URL)
+const encodedURL = "aHR0cHM6Ly9zZWN1cmUtZmlyZWJhc2Utc2VydmVyLm9ucmVuZGVyLmNvbS9nZXQvY29uZmln";
+const secureURL = atob(encodedURL);
 
-fetch(decodedURL)
+fetch(secureURL)
   .then(res => res.json())
   .then(data => {
     secretLinks = {};
-    Object.assign(secretLinks, data.secrets); // ✅ مهم جداً
+    Object.assign(secretLinks, data.secrets); // تأكد أن الكولكشن فيه مستند ID = secrets
     console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
   })
   .catch(error => {
-    console.error("❌ خطأ في تحميل البيانات من السيرفر:", error); // ✅ هنا كانت الغلطة
+    console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
   });
 
 // ===== Init App Function =====
