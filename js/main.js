@@ -23,18 +23,21 @@ window.addEventListener("offline", () => {
   document.body.appendChild(blackout);
 });
 
-// ===== Load Secrets from Firebase =====
-db.collection("config").doc("secrets").get().then(doc => {
-  if (doc.exists) {
-    secretLinks = doc.data();
-    console.log("✅ تم تحميل البيانات:", secretLinks);
+// ===== Load Secrets from Secure Server =====
+fetch('https://secure-firebase-server.onrender.com/get-data')
+  .then(res => res.json())
+  .then(data => {
+    secretLinks = {};
+    data.forEach(entry => {
+      Object.assign(secretLinks, entry);
+    });
+    console.log("✅ تم تحميل البيانات من السيرفر:", secretLinks);
     if (typeof initApp === 'function') initApp();
-  } else {
-    console.error("❌ البيانات غير موجودة.");
-  }
-}).catch(error => {
-  console.error("❌ خطأ في تحميل البيانات:", error);
-});
+  })
+  .catch(error => {
+    console.error("❌ خطأ في تحميل البيانات من السيرفر:", error);
+  });
+
 
 // ===== Init App Function =====
 function initApp() {
